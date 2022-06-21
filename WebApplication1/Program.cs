@@ -1,5 +1,7 @@
 using CardsAPi.Data;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
+using WebApplication1.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<CardsDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CardsDbConnectionString")));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
