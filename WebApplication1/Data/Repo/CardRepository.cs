@@ -17,7 +17,7 @@ namespace WebApplication1.Data.Repo
             dc.Cards.Add(card);
         }
 
-        public void DeleteCard(int cardId)
+        public void DeleteCard(Guid cardId)
         {
             var card = dc.Cards.Find(cardId);
             dc.Cards.Remove(card);

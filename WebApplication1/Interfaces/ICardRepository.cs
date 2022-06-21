@@ -7,7 +7,7 @@ namespace WebApplication1.Interfaces
         Task<IEnumerable<Card>> GetCardsAsync();
         void AddCard(Card card);
 
-        void DeleteCard(int cardId);
+        void DeleteCard(Guid cardId);
 
         Task<Card> FindCard(Guid Id);
     }
