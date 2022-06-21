@@ -9,6 +9,6 @@ namespace WebApplication1.Interfaces
 
         void DeleteCard(int cardId);
 
-        Task<Card> FindCard(int Id);
+        Task<Card> FindCard(Guid Id);
     }
 }

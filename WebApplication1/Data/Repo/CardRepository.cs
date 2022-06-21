@@ -23,7 +23,7 @@ namespace WebApplication1.Data.Repo
             dc.Cards.Remove(card);
         }
 
-        public async Task<Card> FindCard(int Id)
+        public async Task<Card> FindCard(Guid Id)
         {
             return await dc.Cards.FindAsync(Id);
         }
