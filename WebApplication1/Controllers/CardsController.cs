@@ -1,7 +1,9 @@
 ﻿using CardsAPi.Data;
 using CardsAPi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web.Resource;
 using WebApplication1.Dtos;
 using WebApplication1.Interfaces;
 
@@ -22,6 +24,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+
+        [Authorize(Roles = "AdminRole")]
+        [RequiredScope(RequiredScopesConfigurationKey ="AzureAd:Scopes1")]
         public async Task<IActionResult> GetAllCards()
         {
             //  var cards =await cardsDbContext.Cards.ToListAsync();
@@ -46,6 +51,8 @@ namespace WebApplication1.Controllers
         [HttpGet]
         [Route("{Id:guid}")]
         [ActionName("GetCard")]
+        [Authorize(Roles = "NormalUser")]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<IActionResult> GetCard([FromRoute] Guid Id)
         {
             // var card = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id==id);
@@ -60,6 +67,8 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "NormalUser")]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<IActionResult> AddCard([FromBody] CardDto cardDto)
         {
             cardDto.Id = Guid.NewGuid();
@@ -84,6 +93,8 @@ namespace WebApplication1.Controllers
 
         [HttpPut]
         [Route("{Id:guid}")]
+        [Authorize(Roles = "NormalUser")]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<IActionResult> UpdateCard([FromRoute] Guid Id, [FromBody] CardDto cardDto)
         {
 
@@ -110,6 +121,8 @@ namespace WebApplication1.Controllers
 
         [HttpDelete]
         [Route("{Id:guid}")]
+        [Authorize(Roles = "NormalUser")]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<IActionResult> DeleteCard([FromRoute] Guid Id)
         {
 
