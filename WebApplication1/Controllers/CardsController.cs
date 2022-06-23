@@ -34,7 +34,7 @@ namespace WebApplication1.Controllers
                               Id = c.Id,
                               CardholderName = c.CardholderName,
                               CardNumber = c.CardNumber,
-                              CVV =c.CVC,
+                              CVC =c.CVC,
                               ExpiryMonth=c.ExpiryMonth,
                               ExpiryYear =c.ExpiryYear
 
@@ -60,32 +60,45 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCard([FromBody] Card card)
+        public async Task<IActionResult> AddCard([FromBody] CardDto cardDto)
         {
-            card.Id = Guid.NewGuid();
+            cardDto.Id = Guid.NewGuid();
 
-           await cardsDbContext.Cards.AddAsync(card);
+            var card = new Card
+            {
+                Id = cardDto.Id,
+                CardholderName = cardDto.CardholderName,
+                CardNumber = cardDto.CardNumber,
+                CVC = cardDto.CVC,
+                ExpiryMonth = cardDto.ExpiryMonth,
+                ExpiryYear = cardDto.ExpiryYear
+            };
 
-            cardsDbContext.SaveChangesAsync();
+
+           unitOfWork.cardRepository.AddCard(card);
+
+            await unitOfWork.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetCard),new { id = card.Id },card);
         }
 
         [HttpPut]
         [Route("{Id:guid}")]
-        public async Task<IActionResult> UpdateCard([FromRoute] Guid id, [FromBody] Card card)
+        public async Task<IActionResult> UpdateCard([FromRoute] Guid Id, [FromBody] CardDto cardDto)
         {
 
-            var existingCards = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
+            var existingCards = await unitOfWork.cardRepository.FindCard(Id);
 
             if (existingCards != null)
             {
-                existingCards.CardholderName = card.CardholderName;
-                existingCards.CardNumber = card.CardNumber;
-                existingCards.CVC = card.CVC;
-                existingCards.ExpiryMonth = card.ExpiryMonth;
-                existingCards.ExpiryYear = card.ExpiryYear;
-                await cardsDbContext.SaveChangesAsync();
+                existingCards.CardholderName = cardDto.CardholderName;
+                existingCards.CardNumber = cardDto.CardNumber;
+                existingCards.CVC = cardDto.CVC;
+                existingCards.ExpiryMonth = cardDto.ExpiryMonth;
+                existingCards.ExpiryYear = cardDto.ExpiryYear;
+
+
+                await unitOfWork.SaveChangesAsync();
 
                 return Ok(existingCards);
 
@@ -97,15 +110,15 @@ namespace WebApplication1.Controllers
 
         [HttpDelete]
         [Route("{Id:guid}")]
-        public async Task<IActionResult> DeleteCard([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteCard([FromRoute] Guid Id)
         {
 
-            var existingCard = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
+            var existingCard = await unitOfWork.cardRepository.FindCard(Id);
 
             if (existingCard != null)
             {
-                cardsDbContext.Cards.Remove(existingCard);
-                await cardsDbContext.SaveChangesAsync();
+                unitOfWork.cardRepository.DeleteCard(Id);
+                await unitOfWork.SaveChangesAsync();
 
                 return Ok(existingCard); 
             }

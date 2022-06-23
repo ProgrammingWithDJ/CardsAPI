@@ -7,7 +7,7 @@
 
         public int CardNumber { get; set; }
 
-        public int CVV { get; set; }
+        public int CVC { get; set; }
         public int ExpiryMonth { get; set; }
 
         public int ExpiryYear { get; set; }
