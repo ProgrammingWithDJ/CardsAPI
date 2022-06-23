@@ -1,7 +1,8 @@
 # CardsAPI
 
-Cards API returns the debt card information from the SQL Database.
+Cards API returns the debt card information from the Azure SQL Database.
 
-This API is built with DotNet core and Will be adding enterprise level patterns for lerning purpose.
+This API is built with DotNet core and Will be adding enterprise level patterns for learning purpose.
+Added Repository pattern, Dtos and Unit of Work.
 
-CUrrently were in a row to implement Repository pattern, Unit of Work and Dtos
+Added Azure AD authetication and Authorization.
